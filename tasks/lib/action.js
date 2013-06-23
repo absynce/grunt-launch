@@ -49,7 +49,6 @@ module.exports = function (grunt) {
         ssh.stdin.end();
     };
 
-
     exports.local = function (cmd, callback) {
         cmd = cmd.split(' ');
         var pname = cmd.shift(),
@@ -72,5 +71,6 @@ module.exports = function (grunt) {
 
         proc.stdin.end();
     };
+
     return exports;
 };
