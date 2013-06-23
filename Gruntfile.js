@@ -33,13 +33,18 @@ module.exports = function(grunt) {
             info: {
                 options: {
                     remote: '?',
-                    remotepath: '~/'
+                    remotepath: '~/',
+                    sitePath: '/var/node-launch-test'
                 }
             },
             removeOldTempDir: true,
             createTempDir: true,
             checkout: true,
             installDependencies: true,
+            createVersionedDir: true,
+            moveTempToVersioned: true,
+            symbolicLink: true,
+            restart: true,
             default_options: {
                 options: {
                 },

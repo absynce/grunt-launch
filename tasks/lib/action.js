@@ -49,10 +49,16 @@ module.exports = function (grunt) {
         ssh.stdin.end();
     };
 
-    exports.local = function (cmd, callback) {
+    exports.local = function (cmd, callback, options) {
+        this.options = options || {};
+
         cmd = cmd.split(' ');
         var pname = cmd.shift(),
-        proc = spawn(pname, cmd);
+        proc = spawn(pname, cmd, { cwd: this.options.cwd });
+
+        if (this.options.cwd) {
+            grunt.log.writeln(('\n  $ cd ' + this.options.cwd).blue);
+        }
 
         grunt.log.writeln(('\n  $ ' + pname + ' ' + cmd.join(' ')).blue);
         process.stdout.write('\n    ');

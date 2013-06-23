@@ -31,11 +31,19 @@ module.exports = function (grunt) {
             var pkg = JSON.parse(data);
 
             share.info = {
-                name : pkg.name,
-                v : pkg.version || '?.?.?',
-                remote : this.options.remote,
-                remotepath : this.options.remotepath
+                name         : pkg.name,
+                v            : pkg.version || '?.?.?',
+                env          : process.env.NODE_ENV || 'development',
+                remote       : this.options.remote,
+                remotepath   : this.options.remotepath,
+                sitePath     : this.options.sitePath
             };
+
+            var fullSitePath = share.info.sitePath + '-' + share.info.env;
+
+            share.info.versionedPath = fullSitePath + '/.versions/' + share.info.name + '@' + share.info.v;
+            share.info.livePath = fullSitePath + '/' + share.info.name;
+            action.notice('share.info: ' + require('util').inspect(share.info));
 
             action.success('Collected launch info');
             done();
@@ -99,23 +107,65 @@ module.exports = function (grunt) {
     exports.installDependencies = function () {
         var done = this.async();
 
-        grunt.util.spawn({ cmd: 'pwd' },
-            /*'cd ' + share.tempdir +
-            ' && npm install --production'*/ 
-                         function (error, result, exitcode) {
-                             var util = require('util');
-                             grunt.log.writeln('installDependencies: ');
-                             grunt.log.writeln('  error: ' + util.inspect(error));
-                             grunt.log.writeln('  result: ' + util.inspect(result));
-                             grunt.log.writeln('  exitcode: ' + util.inspect(exitcode));
-                if (exitcode === 0) {
-                    action.success('Dependencies installed');
-                    done();
-                } else {
-                    action.error('Failed to install dependencies');
+        action.local('npm install --production', function (exitcode) {//, result, exitcode) {
+            if (exitcode === 0) {
+                action.success('Dependencies installed');
+                done();
+            } else {
+                action.error('Failed to install dependencies');
+                done(false);
+            }
+        }, { cwd: share.tempdir });
+    };
+
+    // Create versioned site directory
+    exports.createVersionedDir = function () {
+        var done = this.async();
+
+        action.local('sudo mkdir -p ' + share.info.versionedPath, function (exitcode) {
+            if (exitcode === 0) {
+                action.success('Versioned directory created: ' + share.info.versionedPath);
+                done();
+            }
+            else {
+                action.error('Failed to create versioned directory.');
+                done(false);
+            }
+        });
+    };
+
+    // Move temp files to versioned directory
+    exports.moveTempToVersioned = function () {
+        var done = this.async();
+
+        action.local('sudo rsync -a ' + share.tempdir + ' ' + share.info.versionedPath, function (exitcode) {
+            if (exitcode === 0) {
+                action.success('Temporary files successfully moved to versioned path.');
+                done();
+            }
+                else {
+                    action.error('Failed to move files from ' + share.tempDir + ' to ' + share.info.versionedPath);
                     done(false);
                 }
-            });
+        });
+
     };
+
+    // Create symbolic link from version to live
+    exports.symbolicLink = function () {
+        var done = this.async();
+        
+        action.local('sudo ln -sv ' + share.info.versionedPath + ' ' + share.info.livePath, function (exitcode) {
+            if (exitcode === 0) {
+                action.success('Successfully created the symbolic link.');
+                done();
+            }
+            else {
+                action.error('Failed to create a symbolic link from ' + share.info.versionedPath + ' to ' + share.info.livePath);
+                done(false);
+            }
+        });
+    };
+
     return exports;
 };
