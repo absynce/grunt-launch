@@ -38,7 +38,8 @@ module.exports = function (grunt) {
                 git          : this.options.git,
                 remote       : this.options.remote,
                 remotepath   : this.options.remotepath,
-                sitePath     : this.options.sitePath
+                sitePath     : this.options.sitePath,
+                tempDir      : this.options.tempDir
             };
 
             var fullSitePath = share.info.sitePath + '-' + share.info.env;
@@ -61,7 +62,7 @@ module.exports = function (grunt) {
         //grunt.task.requires('info');
         var done = this.async();
 
-        share.tempdir = '/tmp/' + share.info.name + '-launch/';
+        share.tempdir = share.info.tempDir || '/tmp/' + share.info.name + '-launch/';
         action.local('rm -rf ' + share.tempdir, function (exitcode) {
             if (exitcode === 0) {
                 action.success('Old temporary directory ' + share.tempdir + ' removed');

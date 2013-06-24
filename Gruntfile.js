@@ -35,7 +35,8 @@ module.exports = function(grunt) {
                     git: false,
                     remote: '?',
                     remotepath: '~/',
-                    sitePath: '/var/node-launch-test'
+                    sitePath: '/var/node-launch-test',
+                    tempDir: '/tmp/node-launch-tempdir/'
                 }
             },
             removeOldTempDir: true,
