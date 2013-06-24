@@ -18,24 +18,5 @@ module.exports = function(grunt) {
             grunt.log.error('The launch option specified does not exist: ' + this.target);
         }
     });
-
-    // Restart the app using forever
-    launch.restart = function () {
-        var done = this.async();
-
-        launch.action.local('forever stop  ' + share.info.sitePath + '/server.js && ' +
-                            'forever start ' + share.info.sitePath + '/server.js',
-                            function (exitcode) {
-                                if (exitcode === 0) {
-                                    action.success('App successfully restarted.');
-                                    done();
-                                }
-                                else {
-                                    action.error('Failed to restart app.');
-                                    done(false);
-                                }
-                            });
-    };
-
 };
 

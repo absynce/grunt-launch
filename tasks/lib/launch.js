@@ -43,6 +43,8 @@ module.exports = function (grunt) {
 
             share.info.versionedPath = fullSitePath + '/.versions/' + share.info.name + '@' + share.info.v;
             share.info.livePath = fullSitePath + '/' + share.info.name;
+            // Make settings global.
+            global['launchConfig'] = share;
             action.notice('share.info: ' + require('util').inspect(share.info));
 
             action.success('Collected launch info');
