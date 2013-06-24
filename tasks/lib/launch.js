@@ -34,6 +34,7 @@ module.exports = function (grunt) {
                 name         : pkg.name,
                 v            : pkg.version || '?.?.?',
                 env          : process.env.NODE_ENV || 'development',
+                branch       : this.options.branch,
                 git          : this.options.git,
                 remote       : this.options.remote,
                 remotepath   : this.options.remotepath,
