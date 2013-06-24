@@ -45,7 +45,9 @@ module.exports = function (grunt) {
             var fullSitePath = share.info.sitePath + '-' + share.info.env;
 
             share.info.versionedPath = fullSitePath + '/.versions/' + share.info.name + '@' + share.info.v;
-            share.info.livePath = fullSitePath + '/' + share.info.name;
+            share.info.livePath      = fullSitePath + '/' + share.info.name;
+            share.tempdir            = share.info.tempDir || '/tmp/' + share.info.name + '-launch/';
+
             // Make settings global.
             global['launchConfig'] = share;
             action.notice('share.info: ' + require('util').inspect(share.info));
@@ -62,7 +64,6 @@ module.exports = function (grunt) {
         //grunt.task.requires('info');
         var done = this.async();
 
-        share.tempdir = share.info.tempDir || '/tmp/' + share.info.name + '-launch/';
         action.local('rm -rf ' + share.tempdir, function (exitcode) {
             if (exitcode === 0) {
                 action.success('Old temporary directory ' + share.tempdir + ' removed');
