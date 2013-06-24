@@ -32,6 +32,7 @@ module.exports = function(grunt) {
         launch: {
             info: {
                 options: {
+                    git: false,
                     remote: '?',
                     remotepath: '~/',
                     sitePath: '/var/node-launch-test'
@@ -54,7 +55,7 @@ module.exports = function(grunt) {
         // Release
         release: {
             options: {
-                npm: false,
+                npm: true,
                 commitMessage: 'Release <%= version %>',
                 tagMessage: 'Release <%= version %>'
             }

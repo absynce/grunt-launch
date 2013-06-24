@@ -34,6 +34,7 @@ module.exports = function (grunt) {
                 name         : pkg.name,
                 v            : pkg.version || '?.?.?',
                 env          : process.env.NODE_ENV || 'development',
+                git          : this.options.git,
                 remote       : this.options.remote,
                 remotepath   : this.options.remotepath,
                 sitePath     : this.options.sitePath
@@ -93,8 +94,16 @@ module.exports = function (grunt) {
     // Checkout a copy of the repo to a temporary directory
     exports.checkout = function () {
         var done = this.async();
+        var cmd  = '';
 
-        action.local('git checkout-index --prefix=' + share.tempdir + ' -a -f', function (exitcode) {
+        if (share.info.git) {
+            cmd = 'git --work-tree=/tmp/genesis-myghr/ checkout -f ' + share.info.branch;
+        } else { 
+            cmd = 'git checkout-index --prefix=' + share.tempdir + ' -a -f';
+        }
+
+        action.notice('Current directory: ' + process.cwd());
+        action.local(cmd, function (exitcode) {
             if (exitcode === 0) {
                 action.success('Repo checked out to a temporary directory');
                 done();
