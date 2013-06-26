@@ -25,59 +25,87 @@ In your project's Gruntfile, add a section named `launch` to the data object pas
 ```js
 grunt.initConfig({
   launch: {
-    options: {
-      // Task-specific options go here.
+    info: {
+      options: {
+        branch: 'deploy52',
+        git: true,
+        remote: '?',
+        remotepath: '~/',
+        sitePath: '/var/www',
+        tempDir: '/tmp/my-proj-launch/'
+      }
     },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
+    installDependencies: true,
+    createVersionedDir: true,
+    moveTempToVersioned: true,
+    symbolicLink: true
   },
 })
 ```
 
 ### Options
 
-#### options.separator
+#### info.options.branch
 Type: `String`
-Default value: `',  '`
+Default value: ``
 
-A string value that is used to do something with whatever.
+The branch to checkout from the repo.
 
-#### options.punctuation
+#### info.options.git
+Type: `Boolean`
+Default value: ``
+
+Whether or not to use git to deploy.
+
+When `git: true`, you will need to add a post-receive hook to call grunt launch on the server when you push.
+
+TODO: Add example of `post-receive` hook.
+
+#### info.options.sitePath
 Type: `String`
-Default value: `'.'`
+Default value: ``
 
-A string value that is used to do something else with whatever else.
+The folder to which to deploy the project.
+
+#### info.options.tempDir
+Type: `String`
+Default value: `/tmp/[project-name]-launch`
+
+The temporary folder for staging files.
+
+#### TODO: Add details for each step - removeOldTempDir, etc.
 
 ### Usage Examples
 
 #### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+
 
 ```js
 grunt.initConfig({
   launch: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+    info: {
+      options: {}
     },
+    installDependencies: true,
+    createVersionedDir: true,
+    moveTempToVersioned: true,
+    symbolicLink: true
   },
 })
 ```
 
 #### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+TODO: Add custom option example.
 
 ```js
 grunt.initConfig({
   launch: {
     options: {
-      separator: ': ',
-      punctuation: ' !!!',
     },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+    installDependencies: true,
+    createVersionedDir: true,
+    moveTempToVersioned: true,
+    symbolicLink: true
   },
 })
 ```
