@@ -169,7 +169,7 @@ module.exports = function (grunt) {
     exports.symbolicLink = function () {
         var done = this.async();
         
-        action.local('sudo ln -sv ' + share.info.versionedPath + ' ' + share.info.livePath, function (exitcode) {
+        action.local('sudo ln -sfv -T ' + share.info.versionedPath + ' ' + share.info.livePath, function (exitcode) {
             if (exitcode === 0) {
                 action.success('Successfully created the symbolic link.');
                 done();
