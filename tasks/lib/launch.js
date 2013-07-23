@@ -116,27 +116,12 @@ module.exports = function (grunt) {
             }
         });
     };
-    
-    // Install npm dependencies
-    exports.installDependencies = function () {
-        var done = this.async();
-
-        action.local('npm install --production', function (exitcode) {//, result, exitcode) {
-            if (exitcode === 0) {
-                action.success('Dependencies installed');
-                done();
-            } else {
-                action.error('Failed to install dependencies');
-                done(false);
-            }
-        }, { cwd: share.tempdir });
-    };
 
     // Create versioned site directory
     exports.createVersionedDir = function () {
         var done = this.async();
 
-        action.local('sudo mkdir -p ' + share.info.versionedPath, function (exitcode) {
+        action.remote(share.info.remote, 'sudo mkdir -p ' + share.info.versionedPath, function (exitcode) {
             if (exitcode === 0) {
                 action.success('Versioned directory created: ' + share.info.versionedPath);
                 done();
@@ -148,11 +133,43 @@ module.exports = function (grunt) {
         });
     };
 
+    // Move files to remote server
+    exports.putRemote = function () {
+        var done = this.async();
+
+        var env = share.env ? share.env + '/' : '';
+        action.local('rsync -arvz ' + share.tempdir + ' ' + share.info.remote + ':'
+                     + share.info.versionedPath, function (exitcode) {
+                         if (exitcode === 0) {
+                             action.success('Repo contents put to remote');
+                             done();
+                         } else {
+                             action.error('Could not put repo to remote. Make sure `.payloads` directory exists');
+                             done(false);
+                         }
+                     });
+    };
+
+    // Install npm dependencies
+    exports.installDependencies = function () {
+        var done = this.async();
+
+        action.remote(share.info.remote, 'npm install --production', function (exitcode) {
+            if (exitcode === 0) {
+                action.success('Dependencies installed');
+                done();
+            } else {
+                action.error('Failed to install dependencies');
+                done(false);
+            }
+        }, { cwd: share.info.versionedPath });
+    };
+
     // Move temp files to versioned directory
     exports.moveTempToVersioned = function () {
         var done = this.async();
 
-        action.local('sudo rsync -a ' + share.tempdir + ' ' + share.info.versionedPath, function (exitcode) {
+        action.remote('sudo rsync -a ' + share.tempdir + ' ' + share.info.versionedPath, function (exitcode) {
             if (exitcode === 0) {
                 action.success('Temporary files successfully moved to versioned path.');
                 done();
@@ -169,7 +186,7 @@ module.exports = function (grunt) {
     exports.symbolicLink = function () {
         var done = this.async();
         
-        action.local('sudo ln -sfv -T ' + share.info.versionedPath + ' ' + share.info.livePath, function (exitcode) {
+        action.remote(share.info.remote, 'sudo ln -sfv -T ' + share.info.versionedPath + ' ' + share.info.livePath, function (exitcode) {
             if (exitcode === 0) {
                 action.success('Successfully created the symbolic link.');
                 done();

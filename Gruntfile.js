@@ -9,7 +9,6 @@
 'use strict';
 
 module.exports = function(grunt) {
-
     // Project configuration.
     grunt.initConfig({
         jshint: {
@@ -33,8 +32,8 @@ module.exports = function(grunt) {
             info: {
                 options: {
                     git: false,
-                    remote: '?',
-                    remotepath: '~/',
+                    remote: 'ght-dev',
+                    remotepath: '/tmp/genesis-myghr-launch/',
                     sitePath: '/var/node-launch-test',
                     tempDir: '/tmp/node-launch-tempdir/'
                 }
@@ -42,9 +41,10 @@ module.exports = function(grunt) {
             removeOldTempDir: true,
             createTempDir: true,
             checkout: true,
-            installDependencies: true,
             createVersionedDir: true,
-            moveTempToVersioned: true,
+            putRemote: true,
+            installDependencies: true,
+            //moveTempToVersioned: true,
             symbolicLink: true
         },
 

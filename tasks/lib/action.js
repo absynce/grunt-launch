@@ -28,7 +28,13 @@ module.exports = function (grunt) {
         });
     };
 
-    exports.remote = function (host, cmd, callback) {
+    exports.remote = function (host, cmd, callback, options) {
+        this.options = options || {};
+
+        if (this.options.cwd) {
+            cmd = 'cd ' + this.options.cwd + ' ' + cmd;
+        }
+
         var ssh = spawn('ssh', [host, cmd]), out = '';
 
         process.stdout.write(('\n  $ ssh ' + host + ' ' + cmd + '\n    ').blue);
