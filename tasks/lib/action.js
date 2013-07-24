@@ -36,7 +36,7 @@ module.exports = function (grunt) {
             cmd  = 'cd ' + this.options.cwd + ' ; ' + cmd;
             tty = '-tt';
         }
-        debugger;
+
         var ssh = spawn('ssh', [host, tty, cmd]), out = '';
 
         process.stdout.write(('\n  $ ssh ' + host + ' ' + cmd + '\n    ').blue);
