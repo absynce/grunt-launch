@@ -21,13 +21,10 @@ module.exports = function(grunt) {
                 jshintrc: '.jshintrc',
             },
         },
-
         // Before generating any new files, remove any previously-created files.
         clean: {
             tests: ['tmp'],
         },
-
-        // Configuration to be run (and then tested).
         launch: {
             info: {
                 options: {
@@ -44,16 +41,11 @@ module.exports = function(grunt) {
             createVersionedDir: true,
             putRemote: true,
             installDependencies: true,
-            //moveTempToVersioned: true,
             symbolicLink: true
         },
-
-        // Unit tests.
         nodeunit: {
             tests: ['test/*_test.js'],
         },
-
-        // Release
         release: {
             options: {
                 npm: true,
@@ -61,6 +53,11 @@ module.exports = function(grunt) {
                 commitMessage: 'Release <%= version %>',
                 tagMessage: 'Release <%= version %>'
             }
+        },
+        ignite: {
+            start: true,
+            restart: true,
+            stop: true
         }
     });
 
@@ -79,5 +76,24 @@ module.exports = function(grunt) {
 
     // By default, lint and run all tests.
     grunt.registerTask('default', ['jshint', 'test']);
+    
+    // Start, stop, or restart the app using forever
+    grunt.registerMultiTask('ignite', function () {
+        var done   = this.async();
+        var share  = global.launchConfig;
+        var action = require('./index')(grunt).action;
+        var target = this.target;
+        var cmd    = 'forever -l forever.log -o out.log -e err.log ' + target + ' ' + share.info.livePath + '/server.js';
 
+        action.remote(share.info.remote, cmd, function (exitcode) {
+            if (exitcode === 0) {
+                action.success('App successfully restarted.');
+                done();
+            }
+            else {
+                action.error('Failed to ' + target + ' app.');
+                done(false);
+            }
+        });
+    });
 };

@@ -29,13 +29,15 @@ module.exports = function (grunt) {
     };
 
     exports.remote = function (host, cmd, callback, options) {
+        var tty = '';
         this.options = options || {};
 
         if (this.options.cwd) {
-            cmd = 'cd ' + this.options.cwd + ' ' + cmd;
+            cmd  = 'cd ' + this.options.cwd + ' ; ' + cmd;
+            tty = '-tt';
         }
-
-        var ssh = spawn('ssh', [host, cmd]), out = '';
+        debugger;
+        var ssh = spawn('ssh', [host, tty, cmd]), out = '';
 
         process.stdout.write(('\n  $ ssh ' + host + ' ' + cmd + '\n    ').blue);
 

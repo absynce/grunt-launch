@@ -121,7 +121,7 @@ module.exports = function (grunt) {
     exports.createVersionedDir = function () {
         var done = this.async();
 
-        action.remote(share.info.remote, 'sudo mkdir -p ' + share.info.versionedPath, function (exitcode) {
+        action.remote(share.info.remote, 'mkdir -p ' + share.info.versionedPath, function (exitcode) {
             if (exitcode === 0) {
                 action.success('Versioned directory created: ' + share.info.versionedPath);
                 done();
@@ -138,16 +138,16 @@ module.exports = function (grunt) {
         var done = this.async();
 
         var env = share.env ? share.env + '/' : '';
-        action.local('rsync -arvz ' + share.tempdir + ' ' + share.info.remote + ':'
-                     + share.info.versionedPath, function (exitcode) {
-                         if (exitcode === 0) {
-                             action.success('Repo contents put to remote');
-                             done();
-                         } else {
-                             action.error('Could not put repo to remote. Make sure `.payloads` directory exists');
-                             done(false);
-                         }
-                     });
+        var cmd = 'rsync -arvz ' + share.tempdir + ' ' + share.info.remote + ':' + share.info.versionedPath;
+        action.local(cmd, function (exitcode) {
+            if (exitcode === 0) {
+                action.success('Repo contents put to remote');
+                done();
+            } else {
+                action.error('Could not put repo to remote. Make sure ' + share.info.versionedPath + ' directory exists');
+                done(false);
+            }
+        });
     };
 
     // Install npm dependencies
@@ -186,7 +186,7 @@ module.exports = function (grunt) {
     exports.symbolicLink = function () {
         var done = this.async();
         
-        action.remote(share.info.remote, 'sudo ln -sfv -T ' + share.info.versionedPath + ' ' + share.info.livePath, function (exitcode) {
+        action.remote(share.info.remote, 'ln -sfv -T ' + share.info.versionedPath + ' ' + share.info.livePath, function (exitcode) {
             if (exitcode === 0) {
                 action.success('Successfully created the symbolic link.');
                 done();
