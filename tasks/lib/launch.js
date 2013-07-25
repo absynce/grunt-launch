@@ -36,7 +36,7 @@ module.exports = function (grunt) {
                 env          : process.env.NODE_ENV || 'development',
                 branch       : this.options.branch,
                 git          : this.options.git,
-                remote       : this.options.remote,
+                remote       : grunt.option('remote') || this.options.remote,
                 remotepath   : this.options.remotepath,
                 sitePath     : this.options.sitePath,
                 tempDir      : this.options.tempDir
