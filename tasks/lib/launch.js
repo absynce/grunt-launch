@@ -153,8 +153,9 @@ module.exports = function (grunt) {
     // Install npm dependencies
     exports.installDependencies = function () {
         var done = this.async();
+        var cmd  = 'npm install ' + (share.info.env !== 'development' ? '--production' : '');
 
-        action.remote(share.info.remote, 'npm install --production', function (exitcode) {
+        action.remote(share.info.remote, cmd, function (exitcode) {
             if (exitcode === 0) {
                 action.success('Dependencies installed');
                 done();
