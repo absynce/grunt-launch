@@ -48,6 +48,7 @@ module.exports = function(grunt) {
         },
         release: {
             options: {
+                bump: false,
                 npm: true,
 		tagName: 'v<%= version %>',
                 commitMessage: 'Release <%= version %>',
@@ -95,5 +96,21 @@ module.exports = function(grunt) {
                 done(false);
             }
         });
+    });
+
+    // Override some properties to prepare release.
+    // TODO: Add step to create release branch from develop.
+    // TODO: Add step to git --set-upstream origin branchName
+    grunt.registerTask('prepRelease', function (type) {
+        grunt.config.set('release.options.bump', true);
+        grunt.config.set('release.options.npm', false);
+        grunt.config.set('release.options.tag', false);
+        grunt.config.set('release.options.push', false);
+        
+        if (type === null) {
+            grunt.task.run('release');
+        } else {
+            grunt.task.run('release:' + type);
+        }
     });
 };

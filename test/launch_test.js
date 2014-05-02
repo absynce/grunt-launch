@@ -43,8 +43,9 @@ exports.launch = {
             test.done();
         }
     },
-/*    removeOldTempDir: {
+    removeOldTempDir: {
         setUp: function (done) {
+            grunt.task.run('launch:info');
             grunt.task.run('launch:removeOldTempDir');
             done();
         },
@@ -54,5 +55,5 @@ exports.launch = {
             test.ok(!grunt.file.exists('/tmp/grunt-launch-launch'));
             test.done();
         }
-    }*/
+    }
 };

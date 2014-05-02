@@ -39,7 +39,8 @@ module.exports = function (grunt) {
                 remote       : grunt.option('remote') || this.options.remote,
                 remotepath   : this.options.remotepath,
                 sitePath     : this.options.sitePath,
-                tempDir      : this.options.tempDir
+                tempDir      : this.options.tempDir,
+                subDir       : this.options.subDir || '' // Sub-directory to copy to remote
             };
 
             var fullSitePath = share.info.sitePath + '-' + share.info.env;
@@ -138,7 +139,7 @@ module.exports = function (grunt) {
         var done = this.async();
 
         var env = share.env ? share.env + '/' : '';
-        var cmd = 'rsync -arvz ' + share.tempdir + ' ' + share.info.remote + ':' + share.info.versionedPath;
+        var cmd = 'rsync -arvz ' + share.tempdir + share.info.subDir + ' ' + share.info.remote + ':' + share.info.versionedPath;
         action.local(cmd, function (exitcode) {
             if (exitcode === 0) {
                 action.success('Repo contents put to remote');
@@ -170,7 +171,7 @@ module.exports = function (grunt) {
     exports.moveTempToVersioned = function () {
         var done = this.async();
 
-        action.remote('sudo rsync -a ' + share.tempdir + ' ' + share.info.versionedPath, function (exitcode) {
+        action.remote('sudo rsync -a ' + share.tempdir + share.info.subDir + ' ' + share.info.versionedPath, function (exitcode) {
             if (exitcode === 0) {
                 action.success('Temporary files successfully moved to versioned path.');
                 done();
