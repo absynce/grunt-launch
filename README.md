@@ -47,13 +47,13 @@ grunt.initConfig({
 
 #### info.options.branch
 Type: `String`
-Default value: ``
+Default value: `None`
 
 The branch to checkout from the repo.
 
 #### info.options.git
 Type: `Boolean`
-Default value: ``
+Default value: `None`
 
 Whether or not to use git to deploy.
 
@@ -63,7 +63,7 @@ TODO: Add example of `post-receive` hook.
 
 #### info.options.sitePath
 Type: `String`
-Default value: ``
+Default value: `None`
 
 The folder to which to deploy the project.
 
@@ -72,6 +72,12 @@ Type: `String`
 Default value: `/tmp/[project-name]-launch`
 
 The temporary folder for staging files.
+
+#### info.options.subDir
+Type: `String`
+Default value: `''`
+
+The sub-directory to push to remote. Useful for distributions/builds/uglifying.
 
 #### TODO: Add details for each step - removeOldTempDir, etc.
 
