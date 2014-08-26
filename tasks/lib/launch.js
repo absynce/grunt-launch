@@ -32,7 +32,7 @@ module.exports = function (grunt) {
 
             share.info = {
                 name         : pkg.name,
-                v            : pkg.version || '?.?.?',
+                v            : grunt.option('pkg') || pkg.version || '?.?.?',
                 env          : process.env.NODE_ENV || 'development',
                 branch       : this.options.branch,
                 git          : this.options.git,

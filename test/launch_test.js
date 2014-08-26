@@ -22,6 +22,8 @@ var grunt = require('grunt');
   test.ifError(value)
 */
 
+var linkPackage = '3.5.9';
+
 exports.launch = {
     setUp: function(done) {
         // setup here if necessary
@@ -53,6 +55,20 @@ exports.launch = {
             test.expect(1);
 
             test.ok(!grunt.file.exists('/tmp/grunt-launch-launch'));
+            test.done();
+        }
+    },
+    symbolicLink: {
+        setUp: function (done) {
+            grunt.option('pkg', linkPackage);
+            grunt.task.run('launch:info');
+
+            done();
+        },
+        test1: function (test) {
+            test.expect(1);
+
+            test.ok(true);
             test.done();
         }
     }
