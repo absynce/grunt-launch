@@ -124,8 +124,19 @@ Some options may be specified from the command-line.
 grunt launch --pkg=2.1.0
 ```
 
+#### Action tools
+
+##### action.local
+```js
+var action = require('grunt-launch')(grunt).action;
+action.local('grep -e "space command" somefile.js', function (exitcode) {
+  // do something
+});
+```
+
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-_(Nothing yet)_
+* 0.4.0 - Added support for spaces in command arguments.
+
