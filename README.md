@@ -116,6 +116,14 @@ grunt.initConfig({
 })
 ```
 
+#### Command-line options
+Some options may be specified from the command-line.
+
+##### --pkg
+```bash
+grunt launch --pkg=2.1.0
+```
+
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
