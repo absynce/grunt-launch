@@ -1,6 +1,7 @@
 'use strict';
 
-var spawn = require('child_process').spawn;
+var command = require('./command');
+var spawn   = require('child_process').spawn;
 
 require('./colors');
 
@@ -60,9 +61,9 @@ module.exports = function (grunt) {
     exports.local = function (cmd, callback, options) {
         this.options = options || {};
 
-        cmd = cmd.split(' ');
-        var pname = cmd.shift(),
-        proc = spawn(pname, cmd, { cwd: this.options.cwd });
+        cmd = command.split(cmd);
+        var pname = cmd.shift();
+        var proc  = spawn(pname, cmd, { cwd: this.options.cwd });
 
         if (this.options.cwd) {
             grunt.log.writeln(('\n  $ cd ' + this.options.cwd).blue);

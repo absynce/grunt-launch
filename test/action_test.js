@@ -10,7 +10,7 @@ exports.action = {
     },
     testSpaceCommand: function (test) {
       // test space command here
-      action.local('grep -e "function (" ../Gruntfile.js', function (exitcode) {
+      action.local('grep -e "function (" ./Gruntfile.js', function (exitcode) {
         if (exitcode === 0) {
           action.success('Command with spaces successfully run!');
         }
@@ -19,6 +19,8 @@ exports.action = {
           test.ok(false, 'Command failed with exit code: ' + exitcode);
         }
         test.done();
+      }, {
+        stdio: 'inherit'
       });
     }
   }
