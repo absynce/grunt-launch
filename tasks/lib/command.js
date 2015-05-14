@@ -14,22 +14,24 @@ Command.split = function split(argsString) {
     var args = [];
     argsString.split(' ').reduce(function (previousValue, currentValue, index, array) {
         if (currentValue.startsWith('"')) { return currentValue; }
+        // This handles where first command is separated by a single space - "a grep"
+        // ...and any closing double quote of course.
         if (currentValue.endsWith('"')) {
             args.push(previousValue.replace('"', '') + ' ' + currentValue.replace('"', ''));
+            return '';
         }
-        else {
-            if (index === 1) { args.push(previousValue); }
-            else if (previousValue !== '') { // In enclosing quotes.
-                return previousValue + ' ' + currentValue;
-            }
-            args.push(currentValue);
+        if (previousValue.startsWith('"')) {
+            return previousValue + ' ' + currentValue;
         }
+        if (index === 1) { args.push(previousValue); }
+
+        args.push(currentValue);
         return '';
     });
     return args;
 };
 
-// Polyfille String.startsWith and endsWith if needed.
+// Polyfill String.startsWith and endsWith if needed.
 // From: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
 if (!String.prototype.startsWith) {
   String.prototype.startsWith = function(searchString, position) {
@@ -41,13 +43,13 @@ if (!String.prototype.startsWith) {
 // From: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith
 if (!String.prototype.endsWith) {
   String.prototype.endsWith = function(searchString, position) {
-      var subjectString = this.toString();
-      if (position === undefined || position > subjectString.length) {
-        position = subjectString.length;
-      }
-      position -= searchString.length;
-      var lastIndex = subjectString.indexOf(searchString, position);
-      return lastIndex !== -1 && lastIndex === position;
+    var subjectString = this.toString();
+    if (position === undefined || position > subjectString.length) {
+      position = subjectString.length;
+    }
+    position -= searchString.length;
+    var lastIndex = subjectString.indexOf(searchString, position);
+    return lastIndex !== -1 && lastIndex === position;
   };
 }
 
