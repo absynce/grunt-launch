@@ -139,4 +139,5 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 * 0.4.0 - Added support for spaces in command arguments.
-
+* 0.4.1 - Added support for multiple spaces in command arguments.
+* 0.4.2 - Added support for multiple spaces in command _at beginning_.
