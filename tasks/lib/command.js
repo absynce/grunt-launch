@@ -19,7 +19,9 @@ Command.split = function split(argsString) {
         }
         else {
             if (index === 1) { args.push(previousValue); }
-
+            else if (previousValue !== '') { // In enclosing quotes.
+                return previousValue + ' ' + currentValue;
+            }
             args.push(currentValue);
         }
         return '';

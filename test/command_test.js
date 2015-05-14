@@ -14,6 +14,15 @@ exports.command = {
 
       test.ok(_.isEqual(actual, expected));
       test.done();
+    },
+    multiSpaceTest: function (test) {
+      var cmd      = 'grep -e "i have many space" ../Gruntfile.js';
+      var expected = ['grep', '-e', 'i have many space', '../Gruntfile.js'];
+
+      var actual   = command.split(cmd);
+
+      test.ok(_.isEqual(actual, expected));
+      test.done();
     }
   }
 };
