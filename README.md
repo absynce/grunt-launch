@@ -36,6 +36,7 @@ grunt.initConfig({
       }
     },
     installDependencies: true,
+    installBowerDependencies: true,
     createVersionedDir: true,
     moveTempToVersioned: true,
     symbolicLink: true
@@ -93,6 +94,7 @@ grunt.initConfig({
       options: {}
     },
     installDependencies: true,
+    installBowerDependencies: true,
     createVersionedDir: true,
     moveTempToVersioned: true,
     symbolicLink: true
@@ -109,6 +111,7 @@ grunt.initConfig({
     options: {
     },
     installDependencies: true,
+    installBowerDependencies: true,
     createVersionedDir: true,
     moveTempToVersioned: true,
     symbolicLink: true
