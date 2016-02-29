@@ -32,10 +32,15 @@ grunt.initConfig({
         remote: '?',
         remotepath: '~/',
         sitePath: '/var/www',
-        tempDir: '/tmp/my-proj-launch/'
+        tempDir: '/tmp/my-proj-launch/',
+        bower: {
+          force: false,
+          production: true
+        }
       }
     },
     installDependencies: true,
+    installBowerDependencies: false,
     createVersionedDir: true,
     moveTempToVersioned: true,
     symbolicLink: true
@@ -79,6 +84,19 @@ Default value: `''`
 
 The sub-directory to push to remote. Useful for distributions/builds/uglifying.
 
+#### info.bowerOptions.force
+Type: `Boolean`
+Default value: `false`
+
+[Forces](http://bower.io/docs/api/#install-options) the latest version on conflict.
+
+#### info.bowerOptions.production
+Type: `Boolean`
+Default value: `false`
+
+Installs [production](http://bower.io/docs/api/#install-options) dependencies only.
+
+
 #### TODO: Add details for each step - removeOldTempDir, etc.
 
 ### Usage Examples
@@ -90,9 +108,14 @@ The sub-directory to push to remote. Useful for distributions/builds/uglifying.
 grunt.initConfig({
   launch: {
     info: {
-      options: {}
+      options: {},
+      bowerOptions: {
+        force: true,
+        production: true
+      }
     },
     installDependencies: true,
+    installBowerDependencies: true,
     createVersionedDir: true,
     moveTempToVersioned: true,
     symbolicLink: true
@@ -109,6 +132,7 @@ grunt.initConfig({
     options: {
     },
     installDependencies: true,
+    installBowerDependencies: true,
     createVersionedDir: true,
     moveTempToVersioned: true,
     symbolicLink: true
@@ -124,8 +148,20 @@ Some options may be specified from the command-line.
 grunt launch --pkg=2.1.0
 ```
 
+#### Action tools
+
+##### action.local
+```js
+var action = require('grunt-launch')(grunt).action;
+action.local('grep -e "space command" somefile.js', function (exitcode) {
+  // do something
+});
+```
+
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-_(Nothing yet)_
+* 0.4.0 - Added support for spaces in command arguments.
+* 0.4.1 - Added support for multiple spaces in command arguments.
+* 0.4.2 - Added support for multiple spaces in command _at beginning_.

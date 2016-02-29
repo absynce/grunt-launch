@@ -42,6 +42,12 @@ module.exports = function (grunt) {
                 subDir       : this.options.subDir || '' // Sub-directory to copy to remote
             };
 
+            this.options.bower = this.options.bower || {};
+            share.bower = {
+                force       : this.options.bower.hasOwnProperty('force') ? this.options.bower.force : true,
+                production  : this.options.bower.hasOwnProperty('production') ? (this.options.bower.production ? ' --production' : '') : (share.info.env !== 'development' ? ' --production' : '')
+            };
+
             var fullSitePath = share.info.sitePath + '-' + share.info.env;
 
             share.info.versionedPath = fullSitePath + '/.versions/' + share.info.name + '@' + share.info.v;
@@ -161,6 +167,22 @@ module.exports = function (grunt) {
                 done();
             } else {
                 action.error('Failed to install dependencies');
+                done(false);
+            }
+        }, { cwd: share.info.versionedPath });
+    };
+
+    // Install bower dependencies
+    exports.installBowerDependencies = function () {
+        var done = this.async();
+        var cmd  = 'bower install' + (share.bower.force ? ' -f ' : '') + share.bower.production;
+
+        action.remote(share.info.remote, cmd, function (exitcode) {
+            if (exitcode === 0) {
+                action.success('Dependencies installed');
+                done();
+            } else {
+                action.error('Failed to install bower dependencies');
                 done(false);
             }
         }, { cwd: share.info.versionedPath });
