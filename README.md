@@ -32,10 +32,15 @@ grunt.initConfig({
         remote: '?',
         remotepath: '~/',
         sitePath: '/var/www',
-        tempDir: '/tmp/my-proj-launch/'
+        tempDir: '/tmp/my-proj-launch/',
+        bower: {
+          force: false,
+          production: true
+        }
       }
     },
     installDependencies: true,
+    installBowerDependencies: false,
     createVersionedDir: true,
     moveTempToVersioned: true,
     symbolicLink: true
@@ -79,6 +84,19 @@ Default value: `''`
 
 The sub-directory to push to remote. Useful for distributions/builds/uglifying.
 
+#### info.bowerOptions.force
+Type: `Boolean`
+Default value: `false`
+
+[Forces](http://bower.io/docs/api/#install-options) the latest version on conflict.
+
+#### info.bowerOptions.production
+Type: `Boolean`
+Default value: `false`
+
+Installs [production](http://bower.io/docs/api/#install-options) dependencies only.
+
+
 #### TODO: Add details for each step - removeOldTempDir, etc.
 
 ### Usage Examples
@@ -90,9 +108,14 @@ The sub-directory to push to remote. Useful for distributions/builds/uglifying.
 grunt.initConfig({
   launch: {
     info: {
-      options: {}
+      options: {},
+      bowerOptions: {
+        force: true,
+        production: true
+      }
     },
     installDependencies: true,
+    installBowerDependencies: true,
     createVersionedDir: true,
     moveTempToVersioned: true,
     symbolicLink: true
@@ -109,6 +132,7 @@ grunt.initConfig({
     options: {
     },
     installDependencies: true,
+    installBowerDependencies: true,
     createVersionedDir: true,
     moveTempToVersioned: true,
     symbolicLink: true

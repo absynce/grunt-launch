@@ -8,7 +8,7 @@ module.exports = function (grunt) {
     var share = share || {};
 
     // Get package and option info and put into share.info variable.
-    exports.info = function (options) { 
+    exports.info = function (options) {
         this.options = options;
 
         grunt.log.writeln('In launch.info');
@@ -16,12 +16,12 @@ module.exports = function (grunt) {
         if (!this.options.remote || !this.options.remotepath) {
             action.error('launch requires certain options');
             return;
-        } 
+        }
 
         var done = this.async();
 
         fs.readFile('./package.json', function (err, data) {
-            
+
             if (err) {
                 action.error('Make sure a `package.json` file exists in the root of the project');
                 done(false);
@@ -41,6 +41,12 @@ module.exports = function (grunt) {
                 sitePath     : this.options.sitePath,
                 tempDir      : this.options.tempDir,
                 subDir       : this.options.subDir || '' // Sub-directory to copy to remote
+            };
+
+            this.options.bower = this.options.bower || {};
+            share.bower = {
+                force       : this.options.bower.hasOwnProperty('force') ? this.options.bower.force : true,
+                production  : this.options.bower.hasOwnProperty('production') ? (this.options.bower.production ? ' --production' : '') : (share.info.env !== 'development' ? ' --production' : '')
             };
 
             var fullSitePath = share.info.sitePath + '-' + share.info.env;
@@ -102,7 +108,7 @@ module.exports = function (grunt) {
 
         if (share.info.git) {
             cmd = 'git --work-tree=/tmp/genesis-myghr/ checkout -f ' + share.info.branch;
-        } else { 
+        } else {
             cmd = 'git checkout-index --prefix=' + share.tempdir + ' -a -f';
         }
 
@@ -167,6 +173,22 @@ module.exports = function (grunt) {
         }, { cwd: share.info.versionedPath });
     };
 
+    // Install bower dependencies
+    exports.installBowerDependencies = function () {
+        var done = this.async();
+        var cmd  = 'bower install' + (share.bower.force ? ' -f ' : '') + share.bower.production;
+
+        action.remote(share.info.remote, cmd, function (exitcode) {
+            if (exitcode === 0) {
+                action.success('Dependencies installed');
+                done();
+            } else {
+                action.error('Failed to install bower dependencies');
+                done(false);
+            }
+        }, { cwd: share.info.versionedPath });
+    };
+
     // Move temp files to versioned directory
     exports.moveTempToVersioned = function () {
         var done = this.async();
@@ -187,7 +209,7 @@ module.exports = function (grunt) {
     // Create symbolic link from version to live
     exports.symbolicLink = function () {
         var done = this.async();
-        
+
         action.remote(share.info.remote, 'ln -sfv -T ' + share.info.versionedPath + ' ' + share.info.livePath, function (exitcode) {
             if (exitcode === 0) {
                 action.success('Successfully created the symbolic link.');
