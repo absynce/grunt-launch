@@ -32,11 +32,11 @@ module.exports = function(grunt) {
                     remote: 'ght-dev',
                     remotepath: '/tmp/genesis-myghr-launch/',
                     sitePath: '/var/www',
-                    tempDir: '/tmp/node-launch-tempdir/'
-                },
-                bowerOptions: {
-                    force: false,
-                    production: false
+                    tempDir: '/tmp/node-launch-tempdir/',
+                    bower: {
+                        force: false,
+                        production: false
+                    }
                 }
             },
             removeOldTempDir: true,

@@ -43,9 +43,10 @@ module.exports = function (grunt) {
                 subDir       : this.options.subDir || '' // Sub-directory to copy to remote
             };
 
+            this.options.bower = this.options.bower || {};
             share.bower = {
-                force       : this.bowerOptions.force || true,
-                production  : this.bowerOptions.production || (share.info.env !== 'development' ? ' --production' : '')
+                force       : this.options.bower.hasOwnProperty('force') ? this.options.bower.force : true,
+                production  : this.options.bower.hasOwnProperty('production') ? (this.options.bower.production ? ' --production' : '') : (share.info.env !== 'development' ? ' --production' : '')
             };
 
             var fullSitePath = share.info.sitePath + '-' + share.info.env;
