@@ -43,6 +43,11 @@ module.exports = function (grunt) {
                 subDir       : this.options.subDir || '' // Sub-directory to copy to remote
             };
 
+            share.bower = {
+                force       : this.bowerOptions.force || true,
+                production  : this.bowerOptions.production || (share.info.env !== 'development' ? ' --production' : '')
+            };
+
             var fullSitePath = share.info.sitePath + '-' + share.info.env;
 
             share.info.versionedPath = fullSitePath + '/.versions/' + share.info.name + '@' + share.info.v;
@@ -170,7 +175,7 @@ module.exports = function (grunt) {
     // Install bower dependencies
     exports.installBowerDependencies = function () {
         var done = this.async();
-        var cmd  = 'bower install -f ' + (share.info.env !== 'development' ? '--production' : '');
+        var cmd  = 'bower install' + (share.bower.force ? ' -f ' : '') + share.bower.production;
 
         action.remote(share.info.remote, cmd, function (exitcode) {
             if (exitcode === 0) {

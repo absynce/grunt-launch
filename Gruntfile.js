@@ -33,6 +33,10 @@ module.exports = function(grunt) {
                     remotepath: '/tmp/genesis-myghr-launch/',
                     sitePath: '/var/www',
                     tempDir: '/tmp/node-launch-tempdir/'
+                },
+                bowerOptions: {
+                    force: false,
+                    production: false
                 }
             },
             removeOldTempDir: true,
@@ -41,6 +45,7 @@ module.exports = function(grunt) {
             createVersionedDir: true,
             putRemote: true,
             installDependencies: true,
+            installBowerDependencies: true,
             symbolicLink: true
         },
         nodeunit: {
@@ -77,7 +82,7 @@ module.exports = function(grunt) {
 
     // By default, lint and run all tests.
     grunt.registerTask('default', ['jshint', 'test']);
-    
+
     // Start, stop, or restart the app using forever
     grunt.registerMultiTask('ignite', function () {
         var done   = this.async();
@@ -106,7 +111,7 @@ module.exports = function(grunt) {
         grunt.config.set('release.options.npm', false);
         grunt.config.set('release.options.tag', false);
         grunt.config.set('release.options.push', false);
-        
+
         if (type === null) {
             grunt.task.run('release');
         } else {
