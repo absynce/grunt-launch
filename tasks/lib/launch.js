@@ -106,7 +106,7 @@ module.exports = function (grunt) {
         var cmd  = '';
 
         if (share.info.git) {
-            cmd = 'git --work-tree=/tmp/genesis-myghr/ checkout -f ' + share.info.branch;
+            cmd = 'git --work-tree=' + share.info.remotepath + ' checkout -f ' + share.info.branch;
         } else {
             cmd = 'git checkout-index --prefix=' + share.tempdir + ' -a -f';
         }

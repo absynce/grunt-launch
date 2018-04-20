@@ -29,7 +29,7 @@ grunt.initConfig({
       options: {
         branch: 'deploy52',
         git: true,
-        remote: '?',
+        remote: 'faryn@127.0.0.1',
         remotepath: '~/',
         sitePath: '/var/www',
         tempDir: '/tmp/my-proj-launch/',
@@ -65,6 +65,12 @@ Whether or not to use git to deploy.
 When `git: true`, you will need to add a post-receive hook to call grunt launch on the server when you push.
 
 TODO: Add example of `post-receive` hook.
+
+#### info.options.remote
+Type: `String`
+Default value: `None`
+
+This could be an ssh `[user@]hostname` value (example: `faryn@127.0.0.1`) or an [ssh config host](http://man.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man5/ssh_config.5?query=ssh_config%26sec=5) ([examples](http://nerderati.com/2011/03/17/simplify-your-life-with-an-ssh-config-file/)).
 
 #### info.options.sitePath
 Type: `String`
@@ -160,6 +166,10 @@ action.local('grep -e "space command" somefile.js', function (exitcode) {
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
+
+## Development
+
+To test the remote features you'll need to set up an SSH server.
 
 ## Release History
 * 0.4.0 - Added support for spaces in command arguments.

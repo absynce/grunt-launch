@@ -29,8 +29,8 @@ module.exports = function(grunt) {
             info: {
                 options: {
                     git: false,
-                    remote: 'ght-dev',
-                    remotepath: '/tmp/genesis-myghr-launch/',
+                    remote: 'test-dev',
+                    remotepath: '/tmp/test-launch/',
                     sitePath: '/var/www',
                     tempDir: '/tmp/node-launch-tempdir/',
                     bower: {
