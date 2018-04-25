@@ -12,22 +12,34 @@ var Command = function Command() { };
  */
 Command.split = function split(argsString) {
     var args = [];
-    argsString.split(' ').reduce(function (previousValue, currentValue, index, array) {
-        if (currentValue.startsWith('"')) { return currentValue; }
-        // This handles where first command is separated by a single space - "a grep"
-        // ...and any closing double quote of course.
-        if (currentValue.endsWith('"')) {
-            args.push(previousValue.replace('"', '') + ' ' + currentValue.replace('"', ''));
+
+    var argsSplitBySpace = argsString.split(' ');
+
+    argsSplitBySpace.reduce(function (previousValue, currentValue, index, array) {
+        // Remove surrounding double quotes.
+        if (currentValue.startsWith('"') && currentValue.endsWith('"')) {
+            args.push(trimDoubleQuote(currentValue));
             return '';
         }
-        if (previousValue.startsWith('"')) {
+
+        if (currentValue.startsWith('"') && !currentValue.endsWith('"')) {
+            return currentValue;
+        }
+
+        // This handles where command is separated by a single space - "a grep".
+        if (previousValue.startsWith('"') && currentValue.endsWith('"')) {
+            args.push(trimStartDoubleQuote(previousValue) + ' ' + trimEndDoubleQuote(currentValue));
+            return '';
+        }
+
+        if (previousValue.startsWith('"') && !previousValue.endsWith('"')) {
             return previousValue + ' ' + currentValue;
         }
-        if (index === 1) { args.push(previousValue); }
 
         args.push(currentValue);
         return '';
-    });
+    }, '');
+
     return args;
 };
 
@@ -51,6 +63,18 @@ if (!String.prototype.endsWith) {
     var lastIndex = subjectString.indexOf(searchString, position);
     return lastIndex !== -1 && lastIndex === position;
   };
+}
+
+function trimDoubleQuote(stringToTrim) {
+  return trimStartDoubleQuote(trimEndDoubleQuote(stringToTrim));
+}
+
+function trimStartDoubleQuote(stringToTrim) {
+  return stringToTrim.replace(/^"/, '')
+}
+
+function trimEndDoubleQuote(stringToTrim) {
+  return stringToTrim.replace(/"$/, '')
 }
 
 module.exports = Command;
