@@ -176,3 +176,4 @@ To test the remote features you'll need to set up an SSH server.
 * 0.4.1 - Added support for multiple spaces in command arguments.
 * 0.4.2 - Added support for multiple spaces in command _at beginning_.
 * 0.5.0 - Optionally install bower dependencies and prepare for Grunt 1.0.
+* 0.5.1 - Fix command edge cases, handle double quotes without spaces
